@@ -13,8 +13,22 @@ namespace Introduction
         {
             string path = "C:/Windows";
             ShowLargeFilesWithoutLinq(path);
+            Console.WriteLine("***");
+            ShowLargeFilesWithLinq(path);
+            Console.ReadKey();
         }
 
+        private static void ShowLargeFilesWithLinq(string path)
+        {
+            var fileQuery = from file in new DirectoryInfo(path).GetFiles()
+                            orderby file.Length descending
+                            select file;
+            foreach (var file in fileQuery.Take(5))
+            {
+                Console.WriteLine($"{file.Name,-12} : {file.Length,10:N0}");
+            }
+        }
+        
         private static void ShowLargeFilesWithoutLinq(string path)
         {
             DirectoryInfo directory = new DirectoryInfo(path);
@@ -26,7 +40,6 @@ namespace Introduction
                 FileInfo file = files[i];
                 Console.WriteLine($"{file.Name, -12} : {file.Length, 10:N0}");
             }
-            Console.ReadKey();
         }
 
         public class FileInfoComparer : IComparer<FileInfo>
@@ -35,7 +48,9 @@ namespace Introduction
             {
                 return y.Length.CompareTo(x.Length);
             }
-        }
+        } 
+        
     }
+
  
 }
