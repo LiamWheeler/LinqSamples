@@ -19,6 +19,7 @@ namespace Introduction
         {
             DirectoryInfo directory = new DirectoryInfo(path);
             FileInfo[] files = directory.GetFiles();
+            Array.Sort(files, new FileInfoComparer());
 
             foreach (FileInfo file in files)
             {
@@ -26,7 +27,14 @@ namespace Introduction
             }
             Console.ReadKey();
         }
-        
+
+        public class FileInfoComparer : IComparer<FileInfo>
+        {
+            public int Compare(FileInfo x, FileInfo y)
+            {
+                return y.Length.CompareTo(x.Length);
+            }
+        }
     }
  
 }
